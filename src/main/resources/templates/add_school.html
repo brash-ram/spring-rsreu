@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link th:href="@{/styles/custom_styles.css}" rel="stylesheet"/>
+</head>
+<body>
+  <header th:replace="~{fragments/header :: header}"></header>
+  <div class="d-flex justify-content-center">
+    <h3 class="fw-bold" th:text="#{add.school.header}"/>
+  </div>
+  <div>
+    <form id="addSchoolForm"
+          th:action="@{/saveSchool}" th:object="${school}" method="post">
+      <ul class="error-container">
+        <li class="error" th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+      </ul>
+      <table class="d-flex justify-content-center">
+        <tr>
+          <td><label th:text="#{school.name}" class="form-label"/></td>
+          <td><input type="text" th:field="*{name}" class="form-control" maxlength="150"/></td>
+        </tr>
+        <tr>
+          <td><label th:text="#{school.type}" class="form-label"/></td>
+          <td>
+            <select th:field="*{type}" class="form-select">
+              <option th:each="i : ${T(com.rsreu.rsreu.enums.SchoolType).values()}" th:value="${i}" th:text="#{__${i}__.label}"/>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td><label th:text="#{school.numberPlacesStudents}" class="form-label"/></td>
+          <td><input type="number" th:field="*{numberPlacesStudents}" class="form-control"/></td>
+        </tr>
+        <tr>
+          <td><label th:text="#{school.numberPlacesTeachers}" class="form-label"/></td>
+          <td><input type="number" th:field="*{numberPlacesTeachers}" class="form-control"/></td>
+        </tr>
+        <tr class="d-flex justify-content-center">
+          <td>
+            <button class="btn btn-dark rounded-pill px-3" th:text="#{add.school.submit}"/>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</body>
+</html>

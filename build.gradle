@@ -27,6 +27,20 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	// https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf
+//	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
+	// https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring5
+//	implementation 'org.thymeleaf:thymeleaf-spring5:3.1.2.RELEASE'
+	// https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring4
+//	implementation 'org.thymeleaf:thymeleaf-spring4:3.0.15.RELEASE'
+	// https://mvnrepository.com/artifact/org.thymeleaf/thymeleaf-spring3
+//	implementation 'org.thymeleaf:thymeleaf-spring3:3.0.15.RELEASE'
+
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.1.3'
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation
+	implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.3'
+
 }
 
 tasks.named('test') {
