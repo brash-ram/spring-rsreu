@@ -2,9 +2,35 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link th:href="@{/styles/custom_styles.css}" rel="stylesheet"/>
 </head>
 <body>
-$END$
+  <header th:replace="~{fragments/header :: header}"></header>
+  <div class="d-flex justify-content-center">
+    <h3 class="fw-bold" th:text="#{list.school.header}"/>
+  </div>
+  <div>
+    <table class="table">
+      <thead>
+      <tr>
+        <td th:text="#{school.name}"/>
+        <td th:text="#{school.type}"/>
+        <td th:text="#{school.numberPlacesStudents}"/>
+        <td th:text="#{school.numberPlacesTeachers}"/>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="school : ${schools}">
+        <td th:text="${school.name}"/>
+        <td th:text="#{__${school.type}__.label}"/>
+        <td th:text="${school.numberPlacesStudents}"/>
+        <td th:text="${school.numberPlacesTeachers}"/>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
 </body>
 </html>
