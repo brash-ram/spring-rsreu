@@ -32,7 +32,7 @@ public class MainController {
         } else {
             schoolService.saveSchool(school);
         }
-        ModelAndView view = new ModelAndView("add_school");
+        ModelAndView view = new ModelAndView("redirect:/");
         view.addObject("school", new School());
         return view;
     }
