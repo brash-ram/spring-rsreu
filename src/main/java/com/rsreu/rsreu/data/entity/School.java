@@ -1,6 +1,6 @@
 package com.rsreu.rsreu.data.entity;
 
-import com.rsreu.rsreu.enums.SchoolType;
+import com.rsreu.rsreu.enums.SchoolTypeEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -27,7 +27,7 @@ public class School {
     private String name;
 
     @Column(name = "type_school", nullable = false)
-    private SchoolType type;
+    private SchoolTypeEnum type;
 
     @Max(value = 10000, message = "{validation.numberPlacesStudents}")
     @Min(value = 20, message = "{validation.numberPlacesStudents}")

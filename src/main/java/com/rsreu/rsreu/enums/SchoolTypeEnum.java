@@ -1,6 +1,6 @@
 package com.rsreu.rsreu.enums;
 
-public enum SchoolType {
+public enum SchoolTypeEnum {
     GENERAL, //общеобразовательная
     LYCEUM, //лицей
     GYMNASIUM, //гимназия
