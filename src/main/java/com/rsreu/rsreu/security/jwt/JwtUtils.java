@@ -1,12 +1,11 @@
 package com.rsreu.rsreu.security.jwt;
 
-import com.rsreu.bestProject.config.ApplicationConfig;
+import com.rsreu.rsreu.configuration.ApplicationConfig;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -14,12 +13,16 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
     private final ApplicationConfig config;
 
     public String getJwtFromHeader(HttpServletRequest request) {
-        return request.getHeader(config.jwt().headerName());
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals(config.jwt().headerName())) {
+                return cookie.getValue();
+            }
+        }
+        return null;
     }
 
     public String getEmailFromJwtToken(String token) {
@@ -31,7 +34,7 @@ public class JwtUtils {
             Jwts.parser().setSigningKey(config.jwt().secret()).parseClaimsJws(authToken);
             return true;
         } catch (Exception e) {
-            logger.error("Generate JWT token is failed: {}", e.getMessage());
+            System.out.println("Generate JWT token is failed: " + e.getMessage());
         }
 
         return false;

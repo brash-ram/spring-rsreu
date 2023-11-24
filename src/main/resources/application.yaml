@@ -28,3 +28,9 @@ spring:
     username: sa
     password: password
     driver-class-name: org.h2.Driver
+
+app:
+  jwt:
+    secret: GigaSecret
+    expiration: 14400000000
+    headerName: token

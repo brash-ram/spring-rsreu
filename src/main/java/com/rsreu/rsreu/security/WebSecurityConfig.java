@@ -1,7 +1,7 @@
 package com.rsreu.rsreu.security;
 
-import com.rsreu.bestProject.security.jwt.AuthEntryPointJwt;
-import com.rsreu.bestProject.security.jwt.AuthTokenFilter;
+import com.rsreu.rsreu.security.jwt.AuthEntryPointJwt;
+import com.rsreu.rsreu.security.jwt.AuthTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +10,15 @@ import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 
 @Configuration
@@ -22,15 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig{
 
-    private static final String[] AUTH_LIST = {
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/swagger/**",
-            "/v3/**",
-            "/webjars/**"
-    };
-
-    private final UserDetailsServiceImpl userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     private final AuthEntryPointJwt unauthorizedHandler;
 
@@ -50,19 +46,27 @@ public class WebSecurityConfig{
     }
 
     @Bean
-    public SecurityFilterChain configure(HttpSecurity http) throws Exception {
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
+    }
+
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests()
-                .requestMatchers(AUTH_LIST).permitAll()
-                .requestMatchers("/**").permitAll()
-                .requestMatchers("/api/auth/signUp/**").permitAll()
-                .requestMatchers("/api/auth/signIn").permitAll()
-                .requestMatchers("/api/**").authenticated();
-        http.csrf().disable();
-        http.cors();
-        http.headers().frameOptions().disable();
+                .exceptionHandling(configurer -> configurer.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(
+                        registry -> registry
+                                .requestMatchers(mvc.pattern("/css/**")).permitAll()
+                                .requestMatchers(mvc.pattern("/auth/**")).permitAll()
+                                .requestMatchers(mvc.pattern("/listSchools")).authenticated()
+                                .requestMatchers(mvc.pattern("/school/**")).hasRole("ADMIN")
+                                .anyRequest().permitAll()
+                )
+                .formLogin(configurer -> configurer.loginPage("/"))
+                .logout((logout) -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/"));
+        http.csrf(AbstractHttpConfigurer::disable);
+        http.cors(AbstractHttpConfigurer::disable);
 
         http.addFilterBefore(authenticationJwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

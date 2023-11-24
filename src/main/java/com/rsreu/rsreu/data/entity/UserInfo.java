@@ -1,6 +1,7 @@
 package com.rsreu.rsreu.data.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,15 +27,15 @@ public class UserInfo implements UserDetails {
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
+    @NotNull
     private String username;
 
     @Column(name = "password", nullable = false)
+    @NotNull
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
     private Set<RoleInfo> roles = new HashSet<>();
 
     @Override
@@ -44,21 +45,21 @@ public class UserInfo implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

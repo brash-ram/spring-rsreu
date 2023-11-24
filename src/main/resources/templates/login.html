@@ -2,9 +2,37 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title></title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link href="/static/css/styles.css" rel="stylesheet"/>
 </head>
 <body>
-$END$
+<div class="d-flex justify-content-center">
+  <h3 class="fw-bold" th:text="#{auth.header}"/>
+</div>
+<div>
+  <form id="loginForm" th:object="${userInfo}" method="post">
+    <ul class="error-container">
+      <li class="error" th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+    </ul>
+    <table class="d-flex justify-content-center">
+      <tr>
+        <td><label th:text="#{auth.username.label}" class="form-label"/></td>
+        <td><input type="text" th:field="*{username}" class="form-control" maxlength="50"/></td>
+      </tr>
+      <tr>
+        <td><label th:text="#{auth.password.label}" class="form-label"/></td>
+        <td><input th:field="*{password}" class="form-control" maxlength="50"/></td>
+      </tr>
+      <tr class="d-flex justify-content-center">
+        <td>
+          <button type="submit" th:formaction="@{/auth/signIn}" class="btn btn-dark rounded-pill px-3" th:text="#{auth.button.sigIn}"/>
+          <button type="submit" th:formaction="@{/auth/signUp}" class="btn btn-dark rounded-pill px-3" th:text="#{auth.button.sigUp}"/>
+        </td>
+      </tr>
+    </table>
+  </form>
+</div>
 </body>
 </html>

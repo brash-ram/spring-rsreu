@@ -18,14 +18,14 @@ public class MainController {
 
     private final SchoolService schoolService;
 
-    @GetMapping(path = {"/", "addSchool"})
+    @GetMapping("/school/addSchool")
     public ModelAndView addSchoolForm() {
         ModelAndView view = new ModelAndView("add_school");
         view.addObject("school", new School());
         return view;
     }
 
-    @PostMapping("/saveSchool")
+    @PostMapping("/school/saveSchool")
     public Object saveSchool(@ModelAttribute @Valid School school, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "add_school";
