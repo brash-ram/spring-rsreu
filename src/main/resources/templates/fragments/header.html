@@ -3,7 +3,7 @@
         <div class="nav nav-pills">
             <ul class="nav nav-pills">
                 <li class="nav-item">
-                    <a href="/school/addSchool" class="nav-link active">
+                    <a href="/school/addSchool" th:if="${session.user.isAdmin()}" class="nav-link active">
                         Добавить школу
                     </a>
                 </li>

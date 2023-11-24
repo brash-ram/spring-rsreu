@@ -14,7 +14,7 @@
   </div>
   <div>
     <form id="addSchoolForm"
-          th:action="@{/saveSchool}" th:object="${school}" method="post">
+          th:action="@{/school/saveSchool}" th:object="${school}" method="post">
       <ul class="error-container">
         <li class="error" th:each="err : ${#fields.allErrors()}" th:text="${err}" />
       </ul>

@@ -1,5 +1,6 @@
 package com.rsreu.rsreu.data.entity;
 
+import com.rsreu.rsreu.enums.RoleEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -37,6 +39,14 @@ public class UserInfo implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Set<RoleInfo> roles = new HashSet<>();
+
+    public List<RoleEnum> getEnumRoles() {
+        return roles.stream().map(RoleInfo::getName).toList();
+    }
+
+    public boolean isAdmin() {
+        return getEnumRoles().contains(RoleEnum.ADMIN);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

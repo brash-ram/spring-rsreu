@@ -41,9 +41,14 @@ public class UserInfoService {
 
     public Cookie getAuthorizeCookie(UserInfo userInfo) {
         String jwtToken = jwtUtils.generateTokenFromEmail(userInfo.getUsername());
-        Cookie cookie = new Cookie(config.jwt().headerName(), jwtToken);
+        return getCookie(config.jwt().headerName(), jwtToken, Math.toIntExact(config.jwt().expiration() / 1000));
+    }
+
+    public Cookie getCookie(String name, String value, int maxAge) {
+        Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setMaxAge(Math.toIntExact(config.jwt().expiration() / 100));
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(maxAge);
         return cookie;
     }
 

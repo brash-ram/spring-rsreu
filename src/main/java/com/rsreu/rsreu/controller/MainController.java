@@ -26,7 +26,7 @@ public class MainController {
     }
 
     @PostMapping("/school/saveSchool")
-    public Object saveSchool(@ModelAttribute @Valid School school, BindingResult result, Model model) {
+    public Object saveSchool(@ModelAttribute @Valid School school, BindingResult result) {
         if (result.hasErrors()) {
             return "add_school";
         } else {

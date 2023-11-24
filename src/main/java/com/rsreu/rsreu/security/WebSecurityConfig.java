@@ -63,8 +63,8 @@ public class WebSecurityConfig{
                                 .requestMatchers(mvc.pattern("/school/**")).hasRole("ADMIN")
                                 .anyRequest().permitAll()
                 )
-                .formLogin(configurer -> configurer.loginPage("/"))
-                .logout((logout) -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/"));
+                .formLogin(configurer -> configurer.loginPage("/"));
+//                .logout((logout) -> logout.logoutUrl("/auth/logout").logoutSuccessUrl("/"));
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
 

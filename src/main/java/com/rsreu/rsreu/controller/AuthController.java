@@ -1,7 +1,9 @@
 package com.rsreu.rsreu.controller;
 
 import com.rsreu.rsreu.configuration.ApplicationConfig;
+import com.rsreu.rsreu.data.entity.RoleInfo;
 import com.rsreu.rsreu.data.entity.UserInfo;
+import com.rsreu.rsreu.enums.RoleEnum;
 import com.rsreu.rsreu.service.UserInfoService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -52,7 +55,14 @@ public class AuthController {
 
         session.setAttribute("user", userInfo);
         response.addCookie(userInfoService.getAuthorizeCookie(userInfo));
-        response.sendRedirect("/school/addSchool");
+
+        List<RoleEnum> roles = userInfo.getEnumRoles();
+
+        if (roles.contains(RoleEnum.ADMIN)) {
+            response.sendRedirect("/school/addSchool");
+        } else {
+            response.sendRedirect("/listSchools");
+        }
         return null;
     }
 
@@ -85,16 +95,16 @@ public class AuthController {
     @GetMapping("/auth/logout")
     public void logout(
             HttpServletResponse response,
-            HttpServletRequest request
+            HttpServletRequest request,
+            HttpSession session
     ) throws IOException {
         Optional<Cookie> cookieOptional = Arrays.stream(request.getCookies())
                 .filter(c -> config.jwt().headerName().equals(c.getName()))
                 .findAny();
         if (cookieOptional.isPresent()) {
-            Cookie cook = new Cookie(cookieOptional.get().getName(), null);
-            cook.setMaxAge(0);
-//            cook.setValue("");
+            Cookie cook = userInfoService.getCookie(config.jwt().headerName(), null, 0);
             response.addCookie(cook);
+            session.invalidate();
             response.sendRedirect("/");
         }
     }
