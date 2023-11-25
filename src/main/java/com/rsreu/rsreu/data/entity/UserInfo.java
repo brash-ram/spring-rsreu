@@ -2,6 +2,7 @@ package com.rsreu.rsreu.data.entity;
 
 import com.rsreu.rsreu.enums.RoleEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -30,10 +31,12 @@ public class UserInfo implements UserDetails {
 
     @Column(name = "username", nullable = false, unique = true)
     @NotNull
+    @NotEmpty
     private String username;
 
     @Column(name = "password", nullable = false)
     @NotNull
+    @NotEmpty
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

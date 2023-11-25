@@ -4,6 +4,8 @@ import com.rsreu.rsreu.enums.SchoolTypeEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -23,9 +25,13 @@ public class School {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotNull
+    @NotEmpty
     @Column(name = "name_school", nullable = false)
     private String name;
 
+    @NotNull
+    @NotEmpty
     @Column(name = "type_school", nullable = false)
     private SchoolTypeEnum type;
 
