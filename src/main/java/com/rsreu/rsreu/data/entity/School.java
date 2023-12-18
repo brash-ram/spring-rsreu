@@ -31,7 +31,6 @@ public class School {
     private String name;
 
     @NotNull
-    @NotEmpty
     @Column(name = "type_school", nullable = false)
     private SchoolTypeEnum type;
 
